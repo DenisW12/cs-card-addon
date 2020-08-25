@@ -1,0 +1,22 @@
+<addon scheme="3.0">
+    <id>order_state_history</id>
+    <status>active</status>
+    <queries>
+        <item for="install">DROP TABLE IF EXISTS ?:order_state_logs;</item>
+        <item for="install">
+            CREATE TABLE ?:order_state_logs (
+            log_id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id MEDIUMINT(8) UNSIGNED NOT NULL,
+            timestamp INT(11) UNSIGNED NOT NULL,
+            order_id MEDIUMINT(8) UNSIGNED NOT NULL,
+            status_from CHAR(1) NOT NULL,
+            status_to CHAR(1) NOT NULL,
+            PRIMARY KEY (log_id)
+            ) Engine=MyISAM DEFAULT CHARSET UTF8;
+        </item>
+
+        <item for="uninstall">
+            DROP TABLE ?:order_state_logs;
+        </item>
+    </queries>
+</addon>
