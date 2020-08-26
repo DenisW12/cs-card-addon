@@ -4,7 +4,9 @@
 
 use Tygh\Registry;
 
-if (!defined('BOOTSTRAP')) { die('Access denied'); }
+if (!defined('BOOTSTRAP')) {
+    die('Access denied');
+}
 
 $params = $_REQUEST;
 

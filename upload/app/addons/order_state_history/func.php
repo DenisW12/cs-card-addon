@@ -1,5 +1,7 @@
 <?php
-if (!defined('BOOTSTRAP')) { die('Access denied'); }
+if (!defined('BOOTSTRAP')) {
+    die('Access denied');
+}
 
 function fn_order_state_history_change_order_status_post($order_id, $status_to, $status_from)
 {
@@ -20,8 +22,9 @@ function fn_order_state_history_change_order_status_post($order_id, $status_to, 
     db_query('INSERT INTO ?:order_state_logs ?e', $data);
 }
 
-function fn_order_state_history_get_logs($params, $items_per_page = 0) {
-    $default_values = array (
+function fn_order_state_history_get_logs($params, $items_per_page = 0)
+{
+    $default_values = array(
         'page' => 1,
         'items_per_page' => $items_per_page,
     );
@@ -43,17 +46,21 @@ function fn_order_state_history_get_logs($params, $items_per_page = 0) {
     if (!empty($params['items_per_page'])) {
         $params['total_items'] = db_get_field(
             'SELECT COUNT(?:order_state_logs.log_id)'
-            . ' FROM ?:order_state_logs'.$join
+            . ' FROM ?:order_state_logs ?p',
+            $join
         );
         $limit = db_paginate($params['page'], $params['items_per_page'], $params['total_items']);
     }
 
+    $fields = implode(', ', $fields);
+
     $logs = db_get_array(
-        'SELECT '.implode(', ', $fields)
-        . ' FROM ?:order_state_logs'
-        . $join
-        . ' ORDER BY ?:order_state_logs.log_id DESC '
-        . $limit
+        'SELECT ?p'
+        . ' FROM ?:order_state_logs ?p'
+        . ' ORDER BY ?:order_state_logs.log_id DESC ?p',
+        $fields,
+        $join,
+        $limit
     );
 
     $order_status_descr = fn_get_simple_statuses(STATUSES_ORDER, true, true);
