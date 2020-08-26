@@ -3,6 +3,13 @@ if (!defined('BOOTSTRAP')) {
     die('Access denied');
 }
 
+/**
+ * Hook handler: save old and new order status into log table
+ *
+ * @param int    $order_id    Order identifier
+ * @param string $status_to   New order status (one char)
+ * @param string $status_from Old order status (one char)
+ */
 function fn_order_state_history_change_order_status_post($order_id, $status_to, $status_from)
 {
     if (!empty(Tygh::$app['session']['auth']['user_id'])) {
@@ -22,6 +29,14 @@ function fn_order_state_history_change_order_status_post($order_id, $status_to, 
     db_query('INSERT INTO ?:order_state_logs ?e', $data);
 }
 
+/**
+ * Gets the list order state logs.
+ *
+ * @param array $params         The parameters for search of logs.
+ * @param int   $items_per_page Items per page.
+ *
+ * @return array The logs list and the search params.
+ */
 function fn_order_state_history_get_logs($params, $items_per_page = 0)
 {
     $default_values = array(
